@@ -9,3 +9,5 @@
     * @javax.persistence.OneToOne
     * javax.persistence.CascadeType
     * @javax.persistence.Lob
+* One to Many JPA Relationships
+    * @javax.persistence.OneToMany
