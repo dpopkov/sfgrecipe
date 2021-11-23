@@ -14,3 +14,7 @@
 * JPA Enumerations
     * @javax.persistence.Enumerated
     * javax.persistence.EnumType.STRING
+* Many to Many JPA Relationships
+    * @javax.persistence.ManyToMany
+    * @javax.persistence.JoinTable
+    * @javax.persistence.JoinColumn
