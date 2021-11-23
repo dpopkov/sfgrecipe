@@ -11,3 +11,6 @@
     * @javax.persistence.Lob
 * One to Many JPA Relationships
     * @javax.persistence.OneToMany
+* JPA Enumerations
+    * @javax.persistence.Enumerated
+    * javax.persistence.EnumType.STRING
