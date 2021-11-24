@@ -20,10 +20,11 @@
     * @javax.persistence.JoinColumn
 * Creating Spring Data Repositories
     * org.springframework.data.repository.CrudRepository
-* Database initialization with Spring
+* Database initialization with Spring (see details below)
     * Property: `spring.jpa.hibernate.ddl-auto` (none, validate, update, create, create-drop)
     * Spring initialization: `schema.sql` and `data.sql`
     * If using data.sql then must set `spring.jpa.defer-datasource-initialization=true`
+* Spring Data JPA Query Methods
 
 ### Initialize with Hibernate
 * Data can be loaded from `import.sql`
