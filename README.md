@@ -20,3 +20,22 @@
     * @javax.persistence.JoinColumn
 * Creating Spring Data Repositories
     * org.springframework.data.repository.CrudRepository
+* Database initialization with Spring
+    * Property: `spring.jpa.hibernate.ddl-auto` (none, validate, update, create, create-drop)
+    * Spring initialization: `schema.sql` and `data.sql`
+    * If using data.sql then must set `spring.jpa.defer-datasource-initialization=true`
+
+### Initialize with Hibernate
+* Data can be loaded from `import.sql`
+    * Hibernate feature (not Spring specific)
+    * Must be on root of classpath
+    * Only executed if Hibernate's ddl-auto property is set to `create` or `create-drop`
+    
+### Initialize with Spring
+* Spring's DataSource initializer via Spring Boot will by default load `schema.sql` and `data.sql` from the root
+* By default, `data.sql` scripts are run before Hibernate is initialized
+* Must set `spring.jpa.defer-datasource-initialization=true` property
+* Spring Boot will also load from `schema-${platform}.sql` and `data-${platform}.sql`
+    * Must set `spring.datasource.platform`
+* May __conflict__ with hibernate.ddl-auto property
+    * Should use setting of `none` or `validate`
