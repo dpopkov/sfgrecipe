@@ -18,3 +18,5 @@
     * @javax.persistence.ManyToMany
     * @javax.persistence.JoinTable
     * @javax.persistence.JoinColumn
+* Creating Spring Data Repositories
+    * org.springframework.data.repository.CrudRepository
