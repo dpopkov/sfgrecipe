@@ -25,6 +25,11 @@
     * Spring initialization: `schema.sql` and `data.sql`
     * If using data.sql then must set `spring.jpa.defer-datasource-initialization=true`
 * Spring Data JPA Query Methods
+* Assignment: Display List of Recipes on Index page 
+    * Update data.sql
+    * Add DataLoader - bootstrap class
+    * Add RecipeService
+    * Update IndexController, index.html
 
 ### Initialize with Hibernate
 * Data can be loaded from `import.sql`

@@ -15,6 +15,7 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+    @Lob
     private String directions;
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
@@ -106,6 +107,7 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        notes.setRecipe(this);
     }
 
     public Set<Ingredient> getIngredients() {
@@ -130,5 +132,15 @@ public class Recipe {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        this.ingredients.add(ingredient);
+        ingredient.setRecipe(this);
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+//        category.getRecipes().add(this);  // causes Exception
     }
 }
