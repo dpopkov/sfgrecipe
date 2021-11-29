@@ -30,6 +30,9 @@
     * Add DataLoader - bootstrap class
     * Add RecipeService
     * Update IndexController, index.html
+* Refactor using Project Lombok
+    * @Data, @EqualsAndHashCode(exclude), @ToString(exclude)
+    * @Slf4j
 
 ### Initialize with Hibernate
 * Data can be loaded from `import.sql`

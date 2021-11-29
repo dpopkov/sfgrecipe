@@ -4,13 +4,16 @@ import learn.sfg.sfgrecipe.domain.*;
 import learn.sfg.sfgrecipe.repositories.CategoryRepository;
 import learn.sfg.sfgrecipe.repositories.RecipeRepository;
 import learn.sfg.sfgrecipe.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
     private final RecipeRepository recipeRepository;
@@ -24,11 +27,12 @@ public class DataLoader implements CommandLineRunner {
         this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
+    @Transactional
     @Override
     public void run(String... args) {
         final List<Recipe> recipes = createRecipes();
         recipeRepository.saveAll(recipes);
-        System.out.println("Recipes loaded....");
+        log.info("Recipes loaded....");
     }
 
     private List<Recipe> createRecipes() {
