@@ -53,3 +53,4 @@
 * JUnit tests
 * Mockito tests
 * Mockito Argument Capture
+* Introduction to Spring MockMVC: `MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();`

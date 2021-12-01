@@ -9,6 +9,8 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class IndexControllerTest {
@@ -39,5 +43,14 @@ class IndexControllerTest {
         then(model).should().addAttribute(eq("recipes"), captor.capture());
         assertThat(viewName).isEqualTo("index");
         assertThat(captor.getValue()).hasSize(2);
+    }
+
+    @Test
+    void testUsingMockMvc() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc.perform(get("/"))
+                .andExpect(model().attributeExists("recipes"))
+                .andExpect(view().name("index"))
+                .andExpect(status().isOk());
     }
 }
