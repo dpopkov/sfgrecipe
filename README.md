@@ -48,3 +48,8 @@
     * Must set `spring.datasource.platform`
 * May __conflict__ with hibernate.ddl-auto property
     * Should use setting of `none` or `validate`
+
+### Testing Spring Framework Applications
+* JUnit tests
+* Mockito tests
+* Mockito Argument Capture
