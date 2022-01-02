@@ -54,3 +54,12 @@
 * Mockito tests
 * Mockito Argument Capture
 * Introduction to Spring MockMVC: `MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();`
+
+### CRUD Operations with Spring MvC
+* Using WebJars with Spring Boot
+    * add to pom
+        * bootstrap
+        * jquery
+    * add to html
+        * `<link th:href="@{/webjars/bootstrap/...`
+        * `<script th:src="@{/webjars/jquery/...`
