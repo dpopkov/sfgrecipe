@@ -5,6 +5,8 @@ import learn.sfg.sfgrecipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -18,5 +20,10 @@ public class RecipeServiceImpl implements RecipeService {
     public Iterable<Recipe> findAll() {
         log.debug("RecipeServiceImpl.findAll()");
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public Optional<Recipe> findById(Long recipeId) {
+        return recipeRepository.findById(recipeId);
     }
 }

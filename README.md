@@ -63,3 +63,6 @@
     * add to html
         * `<link th:href="@{/webjars/bootstrap/...`
         * `<script th:src="@{/webjars/jquery/...`
+* Display Recipe properties on page
+    * add html page, change Bootstrap version to 3.3.7 (otherwise it breaks the page)
+    * add controller, and a method to service
