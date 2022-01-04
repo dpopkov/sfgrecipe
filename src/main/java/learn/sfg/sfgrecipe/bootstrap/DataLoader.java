@@ -45,6 +45,7 @@ public class DataLoader implements CommandLineRunner {
         final UnitOfMeasure tablespoon = unitOfMeasureRepository.findByDescription("Tablespoon").orElseThrow();
         // Categories
         final Category mexican = categoryRepository.findByDescription("Mexican").orElseThrow();
+        final Category american = categoryRepository.findByDescription("American").orElseThrow();
 
         // Ingredients for Guacamole
         Ingredient avocados = new Ingredient("Avocado", BigDecimal.valueOf(2), piece);
@@ -90,6 +91,7 @@ public class DataLoader implements CommandLineRunner {
         tacos.addIngredient(oliveOil);
         tacos.addIngredient(chickenThighs);
         tacos.addCategory(mexican);
+        tacos.addCategory(american);
         recipes.add(tacos);
 
         return recipes;
