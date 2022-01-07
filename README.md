@@ -66,3 +66,8 @@
 * Display Recipe properties on page
     * add html page, change Bootstrap version to 3.3.7 (otherwise it breaks the page)
     * add controller, and a method to service
+* Processing Form Posts with Spring MVC
+* Creating Command Objects and Type Conversions in Spring
+    * add command objects
+    * add converters
+    * use converters in service
