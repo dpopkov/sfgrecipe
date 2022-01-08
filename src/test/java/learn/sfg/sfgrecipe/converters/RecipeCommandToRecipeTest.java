@@ -60,16 +60,16 @@ class RecipeCommandToRecipeTest extends AbstractConverterTest {
         ic1.setId(20L);
         IngredientCommand ic2 = new IngredientCommand();
         ic2.setId(21L);
-        command.setIngredientCommands(Set.of(ic1, ic2));
+        command.setIngredients(Set.of(ic1, ic2));
         command.setDifficulty(DIFFICULTY);
         NotesCommand nc = new NotesCommand();
         nc.setId(NOTES_ID);
-        command.setNotesCommand(nc);
+        command.setNotes(nc);
         CategoryCommand cc1 = new CategoryCommand();
         cc1.setId(40L);
         CategoryCommand cc2 = new CategoryCommand();
         cc2.setId(41L);
-        command.setCategoryCommands(Set.of(cc1, cc2));
+        command.setCategories(Set.of(cc1, cc2));
 
         Recipe recipe = converter.convert(command);
 

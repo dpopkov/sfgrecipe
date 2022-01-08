@@ -1,11 +1,10 @@
 package learn.sfg.sfgrecipe.controllers;
 
+import learn.sfg.sfgrecipe.commands.RecipeCommand;
 import learn.sfg.sfgrecipe.services.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/recipe")
@@ -21,5 +20,17 @@ public class RecipeController {
     public String show(@PathVariable Long recipeId, Model model) {
         model.addAttribute("recipe", recipeService.findById(recipeId).orElseThrow());
         return "/recipe/show";
+    }
+
+    @GetMapping("/new")
+    public String newRecipe(Model model) {
+        model.addAttribute("recipe", new RecipeCommand());
+        return "/recipe/recipeform";
+    }
+
+    @PostMapping("/")
+    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+        RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
+        return "redirect:/recipe/show/" + savedCommand.getId();
     }
 }

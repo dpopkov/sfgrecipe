@@ -17,8 +17,8 @@ public class RecipeCommand {
     private String source;
     private String url;
     private String directions;
-    private Set<IngredientCommand> ingredientCommands = new HashSet<>();
+    private Set<IngredientCommand> ingredients = new HashSet<>();
     private String difficulty;
-    private NotesCommand notesCommand;
-    private Set<CategoryCommand> categoryCommands = new HashSet<>();
+    private NotesCommand notes;
+    private Set<CategoryCommand> categories = new HashSet<>();
 }

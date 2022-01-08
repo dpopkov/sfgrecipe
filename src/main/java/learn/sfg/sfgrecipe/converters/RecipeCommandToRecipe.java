@@ -38,11 +38,11 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         if (source.getDifficulty() != null) {
             recipe.setDifficulty(Difficulty.valueOf(source.getDifficulty().toUpperCase()));
         }
-        recipe.setNotes(notesCommandToNotes.convert(source.getNotesCommand()));
-        for (IngredientCommand ingredientCommand : source.getIngredientCommands()) {
+        recipe.setNotes(notesCommandToNotes.convert(source.getNotes()));
+        for (IngredientCommand ingredientCommand : source.getIngredients()) {
             recipe.addIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
         }
-        for (CategoryCommand categoryCommand : source.getCategoryCommands()) {
+        for (CategoryCommand categoryCommand : source.getCategories()) {
             recipe.addCategory(categoryCommandToCategory.convert(categoryCommand));
         }
         return recipe;

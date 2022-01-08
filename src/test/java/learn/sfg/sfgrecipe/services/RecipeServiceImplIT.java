@@ -40,7 +40,7 @@ class RecipeServiceImplIT {
         // Then
         assertEquals(NEW_DESCRIPTION, savedCommand.getDescription());
         assertEquals(testRecipe.getId(), savedCommand.getId());
-        assertEquals(testRecipe.getCategories().size(), savedCommand.getCategoryCommands().size());
-        assertEquals(testRecipe.getIngredients().size(), savedCommand.getIngredientCommands().size());
+        assertEquals(testRecipe.getCategories().size(), savedCommand.getCategories().size());
+        assertEquals(testRecipe.getIngredients().size(), savedCommand.getIngredients().size());
     }
 }
