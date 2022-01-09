@@ -9,7 +9,7 @@ public interface RecipeService {
 
     Iterable<Recipe> findAll();
 
-    Optional<Recipe> findById(Long recipeId);
+    Optional<RecipeCommand> findById(Long recipeId);
 
     RecipeCommand saveRecipeCommand(RecipeCommand command);
 }

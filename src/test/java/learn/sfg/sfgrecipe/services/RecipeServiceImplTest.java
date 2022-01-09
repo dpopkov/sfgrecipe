@@ -1,5 +1,8 @@
 package learn.sfg.sfgrecipe.services;
 
+import learn.sfg.sfgrecipe.commands.RecipeCommand;
+import learn.sfg.sfgrecipe.converters.RecipeCommandToRecipe;
+import learn.sfg.sfgrecipe.converters.RecipeToRecipeCommand;
 import learn.sfg.sfgrecipe.domain.Recipe;
 import learn.sfg.sfgrecipe.repositories.RecipeRepository;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -21,6 +25,10 @@ class RecipeServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
     @InjectMocks
     RecipeServiceImpl service;
 
@@ -37,8 +45,12 @@ class RecipeServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         given(recipeRepository.findById(anyLong())).willReturn(Optional.of(recipe));
+        RecipeCommand command = new RecipeCommand();
+        command.setId(recipe.getId());
+        given(recipeToRecipeCommand.convert(any())).willReturn(command);
 
-        final Recipe found = service.findById(1L).orElseThrow();
+        final Optional<RecipeCommand> byId = service.findById(1L);
+        final RecipeCommand found = byId.orElseThrow();
 
         then(recipeRepository).should().findById(anyLong());
         then(recipeRepository).shouldHaveNoMoreInteractions();
@@ -49,7 +61,7 @@ class RecipeServiceImplTest {
     void testGetRecipeByIdNotFound() {
         given(recipeRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        final Optional<Recipe> byId = service.findById(1L);
+        final Optional<RecipeCommand> byId = service.findById(1L);
 
         then(recipeRepository).should().findById(anyLong());
         then(recipeRepository).shouldHaveNoMoreInteractions();

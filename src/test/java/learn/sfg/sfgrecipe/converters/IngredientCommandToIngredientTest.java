@@ -35,7 +35,7 @@ class IngredientCommandToIngredientTest extends AbstractConverterTest {
         command.setDescription(DESCRIPTION);
         UnitOfMeasureCommand uomCommand = new UnitOfMeasureCommand();
         uomCommand.setId(UOM_ID);
-        command.setUnitOfMeasure(uomCommand);
+        command.setUom(uomCommand);
 
         Ingredient ingredient = converter.convert(command);
 

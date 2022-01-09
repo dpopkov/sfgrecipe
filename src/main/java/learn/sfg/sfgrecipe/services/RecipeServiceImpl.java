@@ -31,8 +31,9 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Optional<Recipe> findById(Long recipeId) {
-        return recipeRepository.findById(recipeId);
+    public Optional<RecipeCommand> findById(Long recipeId) {
+        final Optional<Recipe> byId = recipeRepository.findById(recipeId);
+        return byId.map(recipeToRecipeCommand::convert);
     }
 
     @Transactional
