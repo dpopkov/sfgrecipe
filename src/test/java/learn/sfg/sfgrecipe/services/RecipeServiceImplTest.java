@@ -67,4 +67,11 @@ class RecipeServiceImplTest {
         then(recipeRepository).shouldHaveNoMoreInteractions();
         assertThat(byId).isEmpty();
     }
+
+    @Test
+    void testDeleteById() {
+        final long recipeId = 21L;
+        service.deleteById(recipeId);
+        then(recipeRepository).should().deleteById(recipeId);
+    }
 }
