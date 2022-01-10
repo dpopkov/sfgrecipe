@@ -74,3 +74,4 @@
 * Create a Recipe (add recipeform and method in controller)
 * Update a Recipe (add method to controller, modify service for command object)
 * Delete a Recipe (add method to controller and service, add link to index page)
+* View Ingredients (add controller and view)
