@@ -75,3 +75,5 @@
 * Update a Recipe (add method to controller, modify service for command object)
 * Delete a Recipe (add method to controller and service, add link to index page)
 * View Ingredients (add controller and view)
+* Show Ingredient
+    * add recipeId to IngredientCommand (need that for hidden properties on form)

@@ -1,6 +1,8 @@
 package learn.sfg.sfgrecipe.controllers;
 
+import learn.sfg.sfgrecipe.commands.IngredientCommand;
 import learn.sfg.sfgrecipe.commands.RecipeCommand;
+import learn.sfg.sfgrecipe.services.IngredientService;
 import learn.sfg.sfgrecipe.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,8 @@ class IngredientControllerTest {
 
     @Mock
     RecipeService recipeService;
+    @Mock
+    IngredientService ingredientService;
     @InjectMocks
     IngredientController controller;
 
@@ -46,5 +50,21 @@ class IngredientControllerTest {
                 .andExpect(model().attributeExists("recipe"));
 
         then(recipeService).should().findById(recipeId);
+    }
+
+    @Test
+    void testShowIngredient() throws Exception {
+        final Long recipeId = 12L;
+        final Long ingredientId = 123L;
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setId(ingredientId);
+        given(ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId)).willReturn(ingredientCommand);
+
+        mockMvc.perform(get("/recipe/{recipeId}/ingredient/{ingredientId}/show", recipeId, ingredientId))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(view().name("recipe/ingredient/show"));
+
+        then(ingredientService).should().findByRecipeIdAndIngredientId(recipeId, ingredientId);
     }
 }

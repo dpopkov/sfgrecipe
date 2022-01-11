@@ -28,4 +28,13 @@ public class Ingredient {
         this.amount = amount;
         this.uom = uom;
     }
+
+    @Builder
+    public Ingredient(Long id, String description, BigDecimal amount, UnitOfMeasure uom, Recipe recipe) {
+        this.id = id;
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+        this.recipe = recipe;
+    }
 }
