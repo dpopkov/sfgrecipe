@@ -77,3 +77,4 @@
 * View Ingredients (add controller and view)
 * Show Ingredient
     * add recipeId to IngredientCommand (need that for hidden properties on form)
+* Update Ingredient (add methods to controller and view, add method to service)
