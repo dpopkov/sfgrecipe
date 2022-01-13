@@ -1,6 +1,8 @@
 package learn.sfg.sfgrecipe.services;
 
 import learn.sfg.sfgrecipe.commands.IngredientCommand;
+import learn.sfg.sfgrecipe.commands.RecipeCommand;
+import learn.sfg.sfgrecipe.commands.UnitOfMeasureCommand;
 import learn.sfg.sfgrecipe.converters.IngredientCommandToIngredient;
 import learn.sfg.sfgrecipe.converters.IngredientToIngredientCommand;
 import learn.sfg.sfgrecipe.domain.Ingredient;
@@ -67,17 +69,40 @@ public class IngredientServiceImpl implements IngredientService {
             updateExistingIngredient(command, ingredientOpt.get());
         } else {
             addNewIngredient(command, existingRecipe);
-            // todo: Test for adding new Ingredient
         }
         Recipe savedRecipe = recipeRepository.save(existingRecipe);
+        Optional<Ingredient> savedIngredientOpt = findUpdatedIngredientById(savedRecipe, command);
+        // On a new Ingredient we don't have an id value
+        if (savedIngredientOpt.isEmpty()) {
+            savedIngredientOpt = findNewIngredientByContent(savedRecipe, command);
+        }
+        final Ingredient ingredient = savedIngredientOpt.orElseThrow();
+        return ingredientConverter.convert(ingredient);
+    }
 
-        // Return command object for updated/saved Ingredient
-        final Ingredient ingredient = savedRecipe.getIngredients()
+    @Override
+    public IngredientCommand createEmptyIngredientForRecipe(RecipeCommand recipeCommand) {
+        IngredientCommand newIngredient = new IngredientCommand();
+        newIngredient.setRecipeId(recipeCommand.getId());
+        newIngredient.setUom(new UnitOfMeasureCommand());
+        return newIngredient;
+    }
+
+    private Optional<Ingredient> findUpdatedIngredientById(Recipe savedRecipe, IngredientCommand command) {
+        return savedRecipe.getIngredients()
                 .stream()
                 .filter(i -> i.getId().equals(command.getId()))
-                .findFirst()
-                .orElseThrow();
-        return ingredientConverter.convert(ingredient);
+                .findFirst();
+    }
+
+    private Optional<Ingredient> findNewIngredientByContent(Recipe savedRecipe, IngredientCommand command) {
+        return savedRecipe.getIngredients()
+                .stream()
+                .filter(i -> i.getDescription() != null && i.getDescription().equals(command.getDescription())
+                        && i.getAmount() != null && i.getAmount().equals(command.getAmount())
+                        && i.getUom() != null && command.getUom() != null
+                        && i.getUom().getId().equals(command.getUom().getId()))
+                .findFirst();
     }
 
     private void updateExistingIngredient(IngredientCommand command, Ingredient existingIngredient) {

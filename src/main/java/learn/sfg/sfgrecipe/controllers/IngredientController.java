@@ -1,6 +1,7 @@
 package learn.sfg.sfgrecipe.controllers;
 
 import learn.sfg.sfgrecipe.commands.IngredientCommand;
+import learn.sfg.sfgrecipe.commands.RecipeCommand;
 import learn.sfg.sfgrecipe.services.IngredientService;
 import learn.sfg.sfgrecipe.services.RecipeService;
 import learn.sfg.sfgrecipe.services.UnitOfMeasureService;
@@ -48,6 +49,15 @@ public class IngredientController {
         log.debug("showUpdateIngredientForm for Recipe ID = {} and Ingredient ID = {}", recipeId, ingredientId);
         model.addAttribute("ingredient",
                 ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
+        model.addAttribute("uomAll", unitOfMeasureService.findAll());
+        return "recipe/ingredient/ingredientForm";
+    }
+
+    @GetMapping("/recipe/{recipeId}/ingredient/new")
+    public String showNewIngredientForm(@PathVariable Long recipeId, Model model) {
+        RecipeCommand recipeCommand = recipeService.findById(recipeId).orElseThrow(); // todo: raise exception if not found
+        IngredientCommand newIngredient = ingredientService.createEmptyIngredientForRecipe(recipeCommand);
+        model.addAttribute("ingredient", newIngredient);
         model.addAttribute("uomAll", unitOfMeasureService.findAll());
         return "recipe/ingredient/ingredientForm";
     }

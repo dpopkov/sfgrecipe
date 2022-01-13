@@ -2,6 +2,7 @@ package learn.sfg.sfgrecipe.services;
 
 import learn.sfg.sfgrecipe.commands.IngredientCommand;
 import learn.sfg.sfgrecipe.commands.UnitOfMeasureCommand;
+import learn.sfg.sfgrecipe.converters.IngredientCommandToIngredient;
 import learn.sfg.sfgrecipe.converters.IngredientToIngredientCommand;
 import learn.sfg.sfgrecipe.domain.Ingredient;
 import learn.sfg.sfgrecipe.domain.Recipe;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +28,8 @@ class IngredientServiceImplTest {
     RecipeRepository recipeRepository;
     @Mock
     IngredientToIngredientCommand ingredientConverter;
+    @Mock
+    IngredientCommandToIngredient ingredientCommandConverter;
     @Mock
     UnitOfMeasureRepository unitOfMeasureRepository;
     @InjectMocks
@@ -57,7 +61,7 @@ class IngredientServiceImplTest {
 
     @DisplayName("Can update existing Ingredient")
     @Test
-    void testSaveIngredientCommandWhnExisting() {
+    void testSaveIngredientCommandWhenExisting() {
         final Long recipeId = 12L;
         final Recipe recipe = new Recipe();
         recipe.setId(recipeId);
@@ -90,6 +94,44 @@ class IngredientServiceImplTest {
         assertNotNull(savedCommand);
         then(recipeRepository).should().findById(recipeId);
         then(recipeRepository).should().save(any(Recipe.class));
+        then(ingredientCommandConverter).shouldHaveNoInteractions();
+        then(ingredientConverter).should().convert(any(Ingredient.class));
+    }
+
+    @DisplayName("Can save a new Ingredient")
+    @Test
+    void testSaveIngredientCommandWhenNew() {
+        final Long recipeId = 12L;
+        final Recipe savedRecipe = new Recipe();
+        savedRecipe.setId(recipeId);
+        savedRecipe.addIngredient(Ingredient.builder().id(122L).build());
+        savedRecipe.addIngredient(Ingredient.builder().id(123L).build());
+
+        given(recipeRepository.findById(recipeId)).willReturn(Optional.of(savedRecipe));
+        given(recipeRepository.save(any())).willReturn(savedRecipe);
+        final long uomId = 1234L;
+        final Ingredient savedIngredient = Ingredient.builder()
+                .id(124L)
+                .description("description")
+                .amount(BigDecimal.ONE)
+                .uom(UnitOfMeasure.builder().id(uomId).build())
+                .build();
+        given(ingredientCommandConverter.convert(any())).willReturn(savedIngredient);
+        given(ingredientConverter.convert(any())).willReturn(new IngredientCommand());
+
+        final IngredientCommand inputCommand = IngredientCommand.builder()
+                .recipeId(recipeId)
+                .description("description")
+                .amount(BigDecimal.ONE)
+                .uom(UnitOfMeasureCommand.builder().id(uomId).build())
+                .build();
+
+        final IngredientCommand savedCommand = service.saveIngredientCommand(inputCommand);
+
+        assertNotNull(savedCommand);
+        then(recipeRepository).should().findById(recipeId);
+        then(recipeRepository).should().save(any(Recipe.class));
+        then(ingredientCommandConverter).should().convert(any(IngredientCommand.class));
         then(ingredientConverter).should().convert(any(Ingredient.class));
     }
 }
