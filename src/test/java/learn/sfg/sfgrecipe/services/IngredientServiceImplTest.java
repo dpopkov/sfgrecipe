@@ -134,4 +134,20 @@ class IngredientServiceImplTest {
         then(ingredientCommandConverter).should().convert(any(IngredientCommand.class));
         then(ingredientConverter).should().convert(any(Ingredient.class));
     }
+
+    @Test
+    void testDeleteById() {
+        final Long recipeId = 12L;
+        final long ingredientId = 123L;
+        final Recipe recipe = new Recipe();
+        recipe.setId(recipeId);
+        Ingredient ingredient = Ingredient.builder().id(ingredientId).build();
+        recipe.addIngredient(ingredient);
+        given(recipeRepository.findById(recipeId)).willReturn(Optional.of(recipe));
+
+        service.deleteById(recipeId, ingredientId);
+
+        then(recipeRepository).should().findById(recipeId);
+        then(recipeRepository).should().save(recipe);
+    }
 }

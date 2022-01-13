@@ -88,6 +88,21 @@ public class IngredientServiceImpl implements IngredientService {
         return newIngredient;
     }
 
+    @Override
+    public void deleteById(Long recipeId, Long ingredientId) {
+        final Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find recipe id " + recipeId));
+        final Ingredient ingredient = recipe.getIngredients()
+                .stream()
+                .filter(i -> i.getId().equals(ingredientId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Cannot in recipe id " + recipeId + " find ingredient id " + ingredientId));
+        recipe.getIngredients().remove(ingredient);
+        ingredient.setRecipe(null);
+        recipeRepository.save(recipe);
+    }
+
     private Optional<Ingredient> findUpdatedIngredientById(Recipe savedRecipe, IngredientCommand command) {
         return savedRecipe.getIngredients()
                 .stream()
