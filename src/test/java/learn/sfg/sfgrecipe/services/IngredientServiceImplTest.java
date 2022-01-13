@@ -35,64 +35,63 @@ class IngredientServiceImplTest {
     @InjectMocks
     IngredientServiceImpl service;
 
+    private static final Long RECIPE_ID = 12L;
+    private static final long INGREDIENT_ID = 123L;
+    private static final long UOM_ID = 1234L;
+
     @DisplayName("Can find Ingredient by recipeId and ingredientId")
     @Test
     void testFindByRecipeIdAndIngredientId() {
-        final Long recipeId = 12L;
         final Recipe recipe = new Recipe();
-        recipe.setId(recipeId);
+        recipe.setId(RECIPE_ID);
         recipe.addIngredient(Ingredient.builder().id(121L).build());
         recipe.addIngredient(Ingredient.builder().id(122L).build());
-        final long ingredientId = 123L;
-        Ingredient ingredientToReturn = Ingredient.builder().id(ingredientId).build();
+        Ingredient ingredientToReturn = Ingredient.builder().id(INGREDIENT_ID).build();
         recipe.addIngredient(ingredientToReturn);
 
-        given(recipeRepository.findById(recipeId)).willReturn(Optional.of(recipe));
-        IngredientCommand command = IngredientCommand.builder().id(ingredientId).recipeId(recipeId).build();
+        given(recipeRepository.findById(RECIPE_ID)).willReturn(Optional.of(recipe));
+        IngredientCommand command = IngredientCommand.builder().id(INGREDIENT_ID).recipeId(RECIPE_ID).build();
         given(ingredientConverter.convert(ingredientToReturn)).willReturn(command);
 
-        IngredientCommand ingredientCommand = service.findByRecipeIdAndIngredientId(recipeId, ingredientId);
+        IngredientCommand ingredientCommand = service.findByRecipeIdAndIngredientId(RECIPE_ID, INGREDIENT_ID);
 
-        assertEquals(recipeId, ingredientCommand.getRecipeId());
-        assertEquals(ingredientId, ingredientCommand.getId());
-        then(recipeRepository).should().findById(recipeId);
+        assertEquals(RECIPE_ID, ingredientCommand.getRecipeId());
+        assertEquals(INGREDIENT_ID, ingredientCommand.getId());
+        then(recipeRepository).should().findById(RECIPE_ID);
         then(ingredientConverter).should().convert(ingredientToReturn);
     }
 
     @DisplayName("Can update existing Ingredient")
     @Test
     void testSaveIngredientCommandWhenExisting() {
-        final Long recipeId = 12L;
         final Recipe recipe = new Recipe();
-        recipe.setId(recipeId);
+        recipe.setId(RECIPE_ID);
         recipe.addIngredient(Ingredient.builder().id(122L).build());
-        final long ingredientId = 123L;
         UnitOfMeasure uom = new UnitOfMeasure();
-        final long uomId = 1234L;
-        uom.setId(uomId);
+        uom.setId(UOM_ID);
         Ingredient ingredientToReturn = Ingredient.builder()
-                .id(ingredientId)
+                .id(INGREDIENT_ID)
                 .uom(uom)
                 .build();
         recipe.addIngredient(ingredientToReturn);
 
-        given(recipeRepository.findById(recipeId)).willReturn(Optional.of(recipe));
+        given(recipeRepository.findById(RECIPE_ID)).willReturn(Optional.of(recipe));
         given(recipeRepository.save(any())).willReturn(recipe);
-        given(unitOfMeasureRepository.findById(uomId)).willReturn(Optional.of(uom));
+        given(unitOfMeasureRepository.findById(UOM_ID)).willReturn(Optional.of(uom));
         given(ingredientConverter.convert(any())).willReturn(new IngredientCommand());
 
         UnitOfMeasureCommand uomCommand = new UnitOfMeasureCommand();
-        uomCommand.setId(uomId);
+        uomCommand.setId(UOM_ID);
         IngredientCommand inputCommand = IngredientCommand.builder()
-                .id(ingredientId)
-                .recipeId(recipeId)
+                .id(INGREDIENT_ID)
+                .recipeId(RECIPE_ID)
                 .uom(uomCommand)
                 .build();
 
         final IngredientCommand savedCommand = service.saveIngredientCommand(inputCommand);
 
         assertNotNull(savedCommand);
-        then(recipeRepository).should().findById(recipeId);
+        then(recipeRepository).should().findById(RECIPE_ID);
         then(recipeRepository).should().save(any(Recipe.class));
         then(ingredientCommandConverter).shouldHaveNoInteractions();
         then(ingredientConverter).should().convert(any(Ingredient.class));
@@ -101,53 +100,49 @@ class IngredientServiceImplTest {
     @DisplayName("Can save a new Ingredient")
     @Test
     void testSaveIngredientCommandWhenNew() {
-        final Long recipeId = 12L;
         final Recipe savedRecipe = new Recipe();
-        savedRecipe.setId(recipeId);
+        savedRecipe.setId(RECIPE_ID);
         savedRecipe.addIngredient(Ingredient.builder().id(122L).build());
         savedRecipe.addIngredient(Ingredient.builder().id(123L).build());
-
-        given(recipeRepository.findById(recipeId)).willReturn(Optional.of(savedRecipe));
+        given(recipeRepository.findById(RECIPE_ID)).willReturn(Optional.of(savedRecipe));
         given(recipeRepository.save(any())).willReturn(savedRecipe);
-        final long uomId = 1234L;
         final Ingredient savedIngredient = Ingredient.builder()
                 .id(124L)
                 .description("description")
                 .amount(BigDecimal.ONE)
-                .uom(UnitOfMeasure.builder().id(uomId).build())
+                .uom(UnitOfMeasure.builder().id(UOM_ID).build())
                 .build();
         given(ingredientCommandConverter.convert(any())).willReturn(savedIngredient);
         given(ingredientConverter.convert(any())).willReturn(new IngredientCommand());
 
         final IngredientCommand inputCommand = IngredientCommand.builder()
-                .recipeId(recipeId)
+                .recipeId(RECIPE_ID)
                 .description("description")
                 .amount(BigDecimal.ONE)
-                .uom(UnitOfMeasureCommand.builder().id(uomId).build())
+                .uom(UnitOfMeasureCommand.builder().id(UOM_ID).build())
                 .build();
 
         final IngredientCommand savedCommand = service.saveIngredientCommand(inputCommand);
 
         assertNotNull(savedCommand);
-        then(recipeRepository).should().findById(recipeId);
+        then(recipeRepository).should().findById(RECIPE_ID);
         then(recipeRepository).should().save(any(Recipe.class));
         then(ingredientCommandConverter).should().convert(any(IngredientCommand.class));
         then(ingredientConverter).should().convert(any(Ingredient.class));
     }
 
+    @DisplayName("Can delete Ingredient by recipe ID and ingredient ID")
     @Test
     void testDeleteById() {
-        final Long recipeId = 12L;
-        final long ingredientId = 123L;
         final Recipe recipe = new Recipe();
-        recipe.setId(recipeId);
-        Ingredient ingredient = Ingredient.builder().id(ingredientId).build();
+        recipe.setId(RECIPE_ID);
+        Ingredient ingredient = Ingredient.builder().id(INGREDIENT_ID).build();
         recipe.addIngredient(ingredient);
-        given(recipeRepository.findById(recipeId)).willReturn(Optional.of(recipe));
+        given(recipeRepository.findById(RECIPE_ID)).willReturn(Optional.of(recipe));
 
-        service.deleteById(recipeId, ingredientId);
+        service.deleteById(RECIPE_ID, INGREDIENT_ID);
 
-        then(recipeRepository).should().findById(recipeId);
+        then(recipeRepository).should().findById(RECIPE_ID);
         then(recipeRepository).should().save(recipe);
     }
 }
