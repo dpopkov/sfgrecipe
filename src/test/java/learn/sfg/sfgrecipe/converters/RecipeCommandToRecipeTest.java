@@ -21,7 +21,7 @@ class RecipeCommandToRecipeTest extends AbstractConverterTest {
     private static final String SOURCE = "Source";
     private static final String URL = "url";
     private static final String DIRECTIONS = "directions";
-    private static final String DIFFICULTY = Difficulty.MODERATE.toString();
+    private static final String DIFFICULTY = Difficulty.MODERATE.getDisplayName();
     public static final long NOTES_ID = 30L;
 
     RecipeCommandToRecipe converter;
@@ -82,7 +82,7 @@ class RecipeCommandToRecipeTest extends AbstractConverterTest {
         assertEquals(SOURCE, recipe.getSource());
         assertEquals(URL, recipe.getUrl());
         assertEquals(DIRECTIONS, recipe.getDirections());
-        assertEquals(DIFFICULTY, recipe.getDifficulty().toString());
+        assertEquals(DIFFICULTY, recipe.getDifficulty().getDisplayName());
         assertEquals(NOTES_ID, recipe.getNotes().getId());
         assertEquals(2, recipe.getIngredients().size());
         assertEquals(2, recipe.getCategories().size());
