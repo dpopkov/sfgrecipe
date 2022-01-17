@@ -83,3 +83,4 @@
 * Enumeration Dropdowns with Spring MVC and Thymeleaf
     * use ${T(fully.qualified.name.of.type).methodName()} for Java type specification
 * Uploading images with Spring MVC
+* Persisting images to database
