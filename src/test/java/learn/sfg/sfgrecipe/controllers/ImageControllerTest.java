@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -64,5 +66,22 @@ class ImageControllerTest {
                 .andExpect(header().string("Location", "/recipe/" + recipeId + "/show"));
 
         then(imageService).should().saveImageFile(eq(recipeId), any(MultipartFile.class));
+    }
+
+    @Test
+    void testRenderImageFromDb() throws Exception {
+        final long recipeId = 1L;
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(recipeId);
+        byte[] imageBytes = "fake image".getBytes();
+        recipeCommand.setImage(imageBytes);
+        when(recipeService.findById(recipeId)).thenReturn(Optional.of(recipeCommand));
+
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/{recipeId}/recipeimage", recipeId))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        byte[] responseBytes = response.getContentAsByteArray();
+        assertEquals(imageBytes.length, responseBytes.length);
     }
 }

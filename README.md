@@ -84,3 +84,4 @@
     * use ${T(fully.qualified.name.of.type).methodName()} for Java type specification
 * Uploading images with Spring MVC
 * Persisting images to database
+* Displaying images from database
